@@ -1,4 +1,4 @@
-package org.culpan.webnomic.controllers;
+package org.culpan.webhero.controllers;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

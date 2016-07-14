@@ -1,12 +1,12 @@
-package org.culpan.webnomic;
+package org.culpan.webhero;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class WebNomicApplication {
+public class WebHeroApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(WebNomicApplication.class, args);
+		SpringApplication.run(WebHeroApplication.class, args);
 	}
 }
