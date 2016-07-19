@@ -13,20 +13,22 @@
         <h2>Heroes List</h2>
         <table class="table table-striped">
             <tr>
-                <th>Id</th>
                 <th>Name</th>
                 <th class='text-center'>Speed</th>
-                <th>View</th>
-                <th>Edit</th>
-                <th>Delete</th>
+                <th class='text-center'>Dex</th>
+                <th class='text-center'>Con</th>
+                <th class='text-right'>View</th>
+                <th class='text-right'>Edit</th>
+                <th class='text-right'>Delete</th>
             </tr>
             <tr th:each="hero : ${heroes}">
-                <td th:text="${hero.id}"><a href="/hero/${hero.id}">Id</a></td>
                 <td th:text="${hero.name}">Name</td>
                 <td th:text="${hero.speed}" class='text-center'>speed</td>
-                <td><a th:href="${'/hero/' + hero.id}">View</a></td>
-                <td><a th:href="${'/hero/edit/' + hero.id}">Edit</a></td>
-                <td><a th:href="${'/hero/delete/' + hero.id}">Delete</a></td>
+                <td th:text="${hero.dex}" class='text-center'>dex</td>
+                <td th:text="${hero.con}" class='text-center'>con</td>
+                <td class='text-right'><a th:href="${'/hero/' + hero.id}">View</a></td>
+                <td class='text-right'><a th:href="${'/hero/edit/' + hero.id}">Edit</a></td>
+                <td class='text-right'><a th:href="${'/hero/delete/' + hero.id}">Delete</a></td>
             </tr>
         </table>
 
