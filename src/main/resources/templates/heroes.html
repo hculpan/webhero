@@ -22,7 +22,7 @@
                 <th class='text-right'>Delete</th>
             </tr>
             <tr th:each="hero : ${heroes}">
-                <td th:text="${hero.name}">Name</td>
+                <td th:text="${hero.heroName}">Hero Name</td>
                 <td th:text="${hero.speed}" class='text-center'>speed</td>
                 <td th:text="${hero.dex}" class='text-center'>dex</td>
                 <td th:text="${hero.con}" class='text-center'>con</td>

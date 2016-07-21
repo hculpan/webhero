@@ -32,9 +32,9 @@ public class HeroController {
         this.heroDAO = heroDAO;
     }
 
-    @RequestMapping("hero/edit/{id}")
-    public String edit(@PathVariable String id, Model model){
-        model.addAttribute("hero", heroRepository.findOne(id));
+    @RequestMapping("hero/edit/{heroName}")
+    public String edit(@PathVariable String heroName, Model model){
+        model.addAttribute("hero", heroRepository.findOne(heroName));
         return "heroform";
     }
 
@@ -46,9 +46,6 @@ public class HeroController {
 
     @RequestMapping(value = "hero", method = RequestMethod.POST)
     public String saveHero(Hero hero){
-        if (StringUtils.isEmpty(hero.getId())) {
-            hero.setId(UUID.randomUUID().toString());
-       }
         heroRepository.save(hero);
         return "redirect:/heroes";
     }
@@ -59,9 +56,9 @@ public class HeroController {
         return "heroform";
     }
 
-    @RequestMapping("/hero/{id}")
-    String index(@PathVariable String id, Model model){
-        model.addAttribute("hero", heroRepository.findOne(id));
+    @RequestMapping("/hero/{heroName}")
+    String index(@PathVariable String heroName, Model model){
+        model.addAttribute("hero", heroRepository.findOne(heroName));
         return "heroshow";
     }
 
