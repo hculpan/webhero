@@ -10,7 +10,8 @@ import java.util.List;
  * Created by harryculpan on 7/14/16.
  */
 public interface HeroRepository extends CrudRepository<Hero, String> {
-    List<Hero> findByHeroName(String heroName);
+    @EnableScan
+    List<Hero> findByName(String name);
 
     @Override
     @EnableScan
