@@ -15,10 +15,7 @@ import org.culpan.webhero.entity.Hero;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * Created by usucuha on 7/19/2016.
@@ -46,29 +43,30 @@ public class HeroDAO {
         this.mapper = mapper;
     }
 
-    public List<Hero> findByName(String name)
-    {
+    public List<Hero> findByHeroName(String heroName) {
+        List<Hero> results = new ArrayList<>();
+
         Map<String, AttributeValue> lastKeyEvaluated;
-        do
-        {
+        do {
             Map<String, AttributeValue> values = new HashMap<>();
-            values.put(":val", new AttributeValue().withS(name));
+            values.put(":val", new AttributeValue().withS(heroName));
             ScanRequest scanRequest = new ScanRequest()
                     .withLimit(100)
                     .withTableName("heroes")
                     .withExpressionAttributeValues(values)
-                    .withFilterExpression("name = :val")
-                    .withProjectionExpression("id");
+                    .withFilterExpression("HeroName = :val");
+                    //.withProjectionExpression("");
 
             ScanResult scanResult = dynamoDB.scan(scanRequest);
 
-            scanResult.getItems().stream().forEach(System.out::println);
+            scanResult.getItems().stream().forEach(item -> {
+                System.out.println(item);
+            });
 
             lastKeyEvaluated = scanResult.getLastEvaluatedKey();
-        }
-        while (null != lastKeyEvaluated);
+        } while (null != lastKeyEvaluated);
 
-        return null;
+        return results;
     }
 
     public List<Hero> findSpeed()
@@ -97,7 +95,7 @@ public class HeroDAO {
         customer.setId(UUID.randomUUID().toString());
         client.getTable("customers").putItem(
                 new Item().withPrimaryKey("id", customer.getId())
-                        .with("name", customer.getName())
+                        .with("name", customer.getHeroName())
                         .with("speed", customer.getSpeed()));
         return customer;
     }

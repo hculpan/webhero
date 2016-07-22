@@ -6,10 +6,13 @@ import com.amazonaws.services.dynamodbv2.document.Table;
 import com.amazonaws.services.dynamodbv2.model.*;
 import org.apache.log4j.Logger;
 import org.culpan.webhero.entity.Hero;
+import org.culpan.webhero.repositories.HeroDAO;
+import org.culpan.webhero.repositories.HeroRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
+import java.util.List;
 
 /**
  * Created by usucuha on 7/19/2016.
@@ -17,16 +20,20 @@ import javax.annotation.PostConstruct;
 @Component
 public class DBInitializer
 {
-    private Logger logger = Logger.getLogger(DBInitializer.class);
+    private Logger log = Logger.getLogger(DBInitializer.class);
 
     private DynamoDBMapper mapper;
+
     private DynamoDB client;
 
+    private HeroRepository heroRepository;
+
     @Autowired
-    public DBInitializer(DynamoDBMapper mapper, DynamoDB client)
+    public DBInitializer(DynamoDBMapper mapper, DynamoDB client, HeroRepository heroRepository)
     {
         this.mapper = mapper;
         this.client = client;
+        this.heroRepository = heroRepository;
     }
 
     @PostConstruct
@@ -37,46 +44,32 @@ public class DBInitializer
 
         //use DynamoDBMapper
         createHeroesTableWithMapper();
-    }
 
-/*    private void createHeroesTable() throws InterruptedException
-    {
-        List<AttributeDefinition> attributeDefinitions = new ArrayList<>(1);
-        attributeDefinitions.add(new AttributeDefinition().withAttributeName("id").withAttributeType(ScalarAttributeType.S));
-        attributeDefinitions.add(new AttributeDefinition().withAttributeName("premium").withAttributeType(ScalarAttributeType.N));
+        List<Hero> heroes = heroRepository.findByHeroName("Arachnid");
+        if (heroes == null || heroes.size() == 0) {
+            Hero arachnid = new Hero();
+            arachnid.setHeroName("Arachnid");
+            arachnid.setSpeed(new Integer(8));
+            arachnid.setDex(new Integer(30));
+            arachnid.setCon(new Integer(20));
+            mapper.save(arachnid);
 
-        List<KeySchemaElement> keyDefinitions = new ArrayList<>(2);
-        keyDefinitions.add(new KeySchemaElement().withAttributeName("id").withKeyType(KeyType.HASH));
-
-        ProvisionedThroughput provisionedThroughput = new ProvisionedThroughput(1L, 1L);
-
-        GlobalSecondaryIndex globalSecondaryIndex =
-                new GlobalSecondaryIndex().withIndexName("premiumIndex")
-                        .withProjection(new Projection().withProjectionType(ProjectionType.ALL))
-                        .withKeySchema(
-                                new KeySchemaElement("premium", KeyType.HASH),
-                                new KeySchemaElement("id", KeyType.RANGE)
-                        )
-                        .withProvisionedThroughput(provisionedThroughput);
-
-        CreateTableRequest request =
-                new CreateTableRequest().withTableName("customers")
-                        .withKeySchema(keyDefinitions)
-                        .withAttributeDefinitions(attributeDefinitions)
-                        .withProvisionedThroughput(provisionedThroughput)
-                        .withGlobalSecondaryIndexes(globalSecondaryIndex);
-
-        try
-        {
-            Table table = client.createTable(request);
-            table.waitForActive();
+            log.info("Inserted Arachnid - id: " + arachnid.getId());
         }
-        catch (ResourceInUseException e)
-        {
-            logger.info("Table {} already exists", request.getTableName());
+
+        heroes = heroRepository.findByHeroName("Night Shadow");
+        if (heroes == null || heroes.size() == 0) {
+            Hero nightShadow = new Hero();
+            nightShadow.setHeroName("Night Shadow");
+            nightShadow.setSpeed(new Integer(6));
+            nightShadow.setDex(new Integer(20));
+            nightShadow.setCon(new Integer(30));
+            mapper.save(nightShadow);
+
+            log.info("Saved Night Shadow - id:" + nightShadow.getId());
         }
     }
-*/
+
     private void createHeroesTableWithMapper() throws InterruptedException {
         CreateTableRequest request = mapper.generateCreateTableRequest(Hero.class);
         ProvisionedThroughput provisionedThroughput = new ProvisionedThroughput(1L, 1L);
@@ -91,7 +84,7 @@ public class DBInitializer
             Table table = client.createTable(request);
             table.waitForActive();
         } catch (ResourceInUseException e) {
-            logger.info("Table already exists: " + request.getTableName());
+            log.info("Table already exists: " + request.getTableName());
         }
     }
 }

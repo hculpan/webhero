@@ -11,7 +11,7 @@ import java.util.List;
  */
 public interface HeroRepository extends CrudRepository<Hero, String> {
     @EnableScan
-    List<Hero> findByName(String name);
+    List<Hero> findByHeroName(String heroName);
 
     @Override
     @EnableScan
