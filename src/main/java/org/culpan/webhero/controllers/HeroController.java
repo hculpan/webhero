@@ -1,7 +1,6 @@
 package org.culpan.webhero.controllers;
 
 import org.culpan.webhero.entity.Hero;
-import org.culpan.webhero.repositories.HeroDAO;
 import org.culpan.webhero.repositories.HeroRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -20,16 +19,9 @@ import java.util.UUID;
 public class HeroController {
     private HeroRepository heroRepository;
 
-    private HeroDAO heroDAO;
-
     @Autowired
     public void setHeroRepository(HeroRepository heroRepository) {
         this.heroRepository = heroRepository;
-    }
-
-    @Autowired
-    public void setHeroDAO(HeroDAO heroDAO) {
-        this.heroDAO = heroDAO;
     }
 
     @RequestMapping("hero/edit/{id}")
