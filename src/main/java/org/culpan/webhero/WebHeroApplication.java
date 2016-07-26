@@ -24,6 +24,6 @@ public class WebHeroApplication {
 
 	@Bean
 	public DB db() {
-		return DBMaker.fileDB("heroes.db").transactionEnable().make();
+		return DBMaker.fileDB("heroes.db").transactionEnable().closeOnJvmShutdown().make();
 	}
 }

@@ -27,11 +27,9 @@ public class HeroRepository {
 
     public List<Hero> findByHeroName(String heroName) {
         List<Hero> result = new ArrayList<>();
-        for (Hero hero : heroTable.all()) {
-            if (org.apache.commons.lang.StringUtils.equalsIgnoreCase(heroName, hero.getHeroName())) {
-                result.add(hero);
-            }
-        }
+        heroTable.all().parallelStream().
+                filter( h -> org.apache.commons.lang.StringUtils.equalsIgnoreCase(heroName, h.getHeroName())).
+                forEach( h -> result.add(h));
         return result;
     };
 
@@ -42,7 +40,11 @@ public class HeroRepository {
     };
 
     public List<Hero> findBySpeed(Integer speed) {
-        return null;
+        List<Hero> result = new ArrayList<>();
+        heroTable.all().parallelStream().
+                filter( h -> speed.equals(h.getSpeed())).
+                forEach( h -> result.add(h));
+        return result;
     };
 
     public Hero findOne(String id) {
